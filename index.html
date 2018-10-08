@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HRSC Mapserver Status 2018</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Magra);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Roboto);
+
+      body { font-family: 'Magra'; }
+      h1, h2, h3, h4 {
+        font-family: 'Magra';
+        font-weight: normal;
+      }
+      h4 {
+        font-weight: bold;
+      }
+      .footnote {
+        position: absolute;
+	left: 0;
+	right: 0;
+        bottom: 2em;
+        font-size: medium;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      a:visited {
+        color: blue;
+      }
+      .footer { position: absolute; bottom: 1em; font-size: medium; }
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+      .header {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+<span class="header"><img style="width: 150px;" src="2000px-Fub-logo.svg.png"><img style="height: 40px; padding-left: 30px;" src="DLR_Logo.svg.png"><img style="height: 40px; padding-left: 30px;" src="03_logo_dark_blue.bmp"></span>
+
+# HRSC MapServer<!--.nothing[*]--> Status
+
+Sebastian Walter
+
+Freie Universität Berlin
+
+## HRSC Team Meeting
+
+8.10.2018
+
+<!--.footnote[.nothing[*] Interactive Mars Analysis and Research System]-->
+
+---
+exclude: true
+
+# Background
+
+As a reminder,
+
+1. Project iMars
+2. Status iMars
+3. iMars vs. HRSC
+4. Single Images!
+4. Current features (comp. to last)
+
+---
+
+# Introduction
+
+###Large amount of image and DTM data demands for a tool to filter, locate and visualize the data
+
+####Online interactive map: [http://maps.planet.fu-berlin.de](http://maps.planet.fu-berlin.de)
+
+- Show footprints of data on a map
+
+- Attribute filtering
+
+- Visualize the data in the map
+
+- Provide context
+
+- Interactive & fast (not a Desktop GIS)
+
+- Provide downloads
+
+- Customized to HRSC's specific properties
+
+
+???
+
+As a reminder,
+
+Motivation was the need for a tool ..., due to the large amount 
+
+
+---
+
+layout: true
+
+<span class="footer">[http://maps.planet.fu-berlin.de](http://maps.planet.fu-berlin.de)</span>
+
+---
+
+# Background
+
+###Client-server based web mapping system
+
+- Browser is the client
+
+- Map server providing images and vector data
+
+- File storage with pre-processed HRSC images & DTMs
+
+- Database of geometries with attributes
+
+- Mosaicked datasets as basemaps and overlays
+
+- Single images are shown in the map as dynamic layers
+
+- Cycle between iamges of multiple coverage as time series
+
+- Original images available for download in GIS-ready formats
+
+
+???
+
+Some words about the technical background
+
+Browser loads HTML and Javascript
+
+which retrieves images and vector data from a map server
+
+...
+
+We have developed new methods for showing single images as dynamic layers
+
+and tools to cycle between 
+
+---
+
+#General System Design
+
+.center[![:scale 100%](2018je005588-imars-f01.png)]
+
+.right[Walter et al., 2018]
+
+???
+
+Workflow of the general system design
+
+Frontend Part - Backend Part
+
+Browser as User Interface
+
+Backend consists of Map Cache, Map server and a RDBMS
+
+Connection between the two as standardized web service calls
+
+Direct connections to the backend possible
+
+---
+
+#Dynamic WMS Layers
+
+.center[![:scale 90%](single-example.png)]
+
+
+???
+
+Single images as dynamic WMS layers
+
+Drawn in the map at the correct position with the correct size
+
+Zoom in and out with full image resolution
+
+New: Pan-sharpened color composites using IHS transformations 
+
+Where multiple coverage, play as loop
+
+---
+
+#Dynamic WMS Layers
+
+.center[![:scale 80%](2018je005588-imars-f02.png)]
+
+.right[Walter et al., 2018]
+
+???
+
+WORKFLOW for single images
+
+standards are developed for one image per layer
+
+Requires additional parameter outside of the official standard
+
+Additional processing possible
+
+---
+
+#Static Layers Examples
+
+###DTM base layer
+
+.center[![:scale 100%](dtm-coverage.png)]
+
+???
+
+Base layer is a DTM composite
+
+Current coverage of HRSC in Color
+
+Composed of semi-official Multi Orbit DTM MC-11
+
+Stacked composite of all single strip DTMs available in the archive beneath
+
+73 new DTMs from Orbits 6733 to 7898 (not yet available in PDS)
+
+(24.10.2017, 25.12.2017, 19.4.2018)
+
+Below that MOLA Hillshade in Grayscale
+
+---
+exclude: true
+
+#Static Layers Examples
+
+###Overlay layers
+
+.center[![:scale 100%](2018je005588-imars-f03.png)]
+
+.right[Walter et al., 2018]
+
+???
+
+Another example
+
+HRSC image mosaics available as overlay
+
+Transparency
+
+Close up of transition between MC11 east and west 
+
+---
+
+#Frontend
+
+.center[![:scale 100%](frontend.png)]
+
+
+???
+
+Here Figure of Frontend Browser window with UI elements
+
+Usual zoom elements
+
+Goto Lat, Lon
+
+Time Filter Panel
+
+Projection Switcher - equatorial, north polar, south polar
+
+workflow toolbar which provides single image functionality
+
+Layer switcher where data visibility is chosen
+
+---
+
+##User interface - updates
+
+###Attribute filter panel
+
+.center[![:scale 70%](attributeFilterPanel.png)]
+
+.pull-left[
+###.center[Workflow toolbar]
+.center[![:scale 80%](workflowToolbar.png)]
+]
+.pull-right[
+###.center[HRSC orbit locator]
+.center[![:scale 80%](hrsc-orbit-locator.png)]
+]
+
+---
+
+# Polar views
+
+.center[![:scale 100%](polar.png)]
+
+???
+
+Another new feature is view of the poles in polar stereographic projection
+
+Including data, level 4 with DTMs and level3 panchromatic
+
+Major aspect at the poles is the variability of the surface
+
+Which requires additional filters
+
+---
+
+# Data Coverage - Ls / time
+
+.pull-left[
+###.center[North pole]
+.center[![:scale 120%](hrsc3nd2nps_date-ls.png)]
+]
+.pull-right[
+###.center[South pole]
+.center[![:scale 120%](hrsc3nd2sps_date-ls.png)]
+]
+
+???
+
+Interannual variablity vs. seasonal variability
+
+For interannual comparisons, we need images from the same Ls
+
+For seasonal comparisons, we need a set of coverage from the same Martian year
+
+Ls=90 - northern summer solstice
+Ls=180 - northern autumn equinox
+Ls=270 - northern winter solstice
+
+---
+
+exclude: true
+
+# Data coverage - LTST / time
+
+.pull-left[
+##.center[North pole]
+.center[![:scale 120%](hrsc3nd2nps_date-localtime.png)]
+]
+.pull-right[
+##.center[South pole]
+.center[![:scale 120%](hrsc3nd2sps_date-localtime.png)]
+]
+
+???
+
+The local time might become an important parameter
+
+which might make HRSC stand out from MRO's cameras
+
+together with Cassis data enables comparisons of targets at different times of the day
+
+---
+
+#Seasonal Variability
+
+.center[![:scale 80%](2018je005588-imars-f11.png)]
+.right[Walter et al., 2018]
+
+???
+
+Seasonal growth , by condensation, and retreat (by sublimation)
+
+removal of CO2 ice is not complete until Ls 320°–330°
+
+---
+
+#Interannual Variability
+
+.center[![:scale 100%](1-s2.0-S0019103516304109-gr7_lrg.jpg)]
+.right[MYs 28, 29, 30, 31 at Ls 299.3° - Calvin et al., 2017]
+
+.center[![:scale 80%](2018je005588-imars-f12.png)]
+.right[MYs 27, 29, 32 at Ls 303-304° - Walter et al., 2018]
+
+
+???
+
+Calvin et al describe an area of late seasonal retreat
+
+At green arrow, the retreat was slowest in MY 29
+
+In all other MY this white patch wasnt visible
+
+Retreat most advanced in MY 28, followong a global dust storm that began near Ls 265° in that year
+
+No data for MY 27, but HRSC
+
+---
+
+exclude: true
+
+# Ideas
+
+1. Show SQL filters for poles and Ls Plots (Walter et al., 2018)
+2. Current Orbit coverage until orbit # ...
+3. Vespa connection incl. introduction to VESPA
+4. Compare with Trek
+
+---
+
+exclude: true
+
+# Outline
+
+1. Intro (change visualization -> HRSC data dissemination) 
+1. Change Detection -> Poles
+2. Interannual processes -> Ls
+3. Statistics
+
+Mess at the poles -> reduce the data
+1. Ls -> good for Interannual comparisons
+2. LTST -> strenght of HRSC, comparison to Cassis data
+
+---
+
+# Summary
+
+## New Features
+
+- Polar stereographic views for both poles
+
+- Pan-sharpened color-composites (IHS) previews in map
+
+- Solar longitude, local time (LTST) and incidence filter
+
+- Release of 73 new level 4 sequences
+
+---
+exclude: true
+
+# Outlook
+
+## Issues
+
+- Filters other than time don't work for ODE footprints
+- Coverage heat map (real-time)
+
+## Further developments 
+
+- Draw height profiles
+- Support SSL
+- Internal Co-I version
+- Other attribute filters?
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      remark.macros.scale = function (percentage) {
+	  var url = this;
+	  return '<img src="' + url + '" style="width: ' + percentage + '" />';
+	};
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
